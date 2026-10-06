@@ -8,7 +8,7 @@ v <- vect(df, geom= c("collection_decimal_longitude", "collection_decimal_latitu
 crs(v) = crs(w)
 
 plot(w)
-plot(v, add = T)
+plot(v, add = T) #note: Stantis shortens 'TRUE' to T because she's lazy
 
 # what countries? ---------------------------------------------------------
 
@@ -40,27 +40,29 @@ france <- subset(w, w$NAME_0 == "France") #there's a lot of ways to do this. Sin
 # we can just use the name. If you had a specific area in mind, get that shapefile and bring it into R. Make sure 
 # it's the correct projection. 
 
+
 plot(france)
 france_data <- mask(v, france)
 plot(france_data, add = T)
 
 # Being Selective ---------------------------------------------------------
+# let's choose only sample types that make sense to us. 
 
 table(france_data$material_type_simp)
 
 table(france_data$migration)
 
-france_data <- filter(france_data, !france_data$migration %in% c("large", "medium")) #excluding these two categories
+france_data <- filter(france_data, !france_data$migration %in% c("large", "medium") & #excluding these two categories
+                        france_data$material_type_group != "soil") #excluding anything like soils
 
 table(france_data$material_type_simp) # checking to see what's left
 
 plot(france)
 plot(france_data, add = T)
 
-
 # Save Data ---------------------------------------------------------------
 
 # you can do this a couple ways, as a .csv or as a .shp
 write.csv(as.data.frame(france_data, geom = "XY"), "output/FranceSr.csv")
 
-writeVector(france_data, "output/FranceSr.shp")
+writeVector(france_data, "output/FranceSr.shp", overwrite = T) 

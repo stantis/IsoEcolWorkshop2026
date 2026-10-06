@@ -229,8 +229,6 @@ table(missing_names$scientific_name) # what's 'missing' at this point are specie
 df <- anti_join(df, missing_names, by = "sample_measurement_id") # lose those 
 # ~3k animal samples that are potentially note representative of local biosphere
 
-
-
 # Checking for missing data -----------------------------------------------
 
 missing_data <- df %>% summarize(across(everything(), ~sum(is.na(.))))
@@ -238,3 +236,5 @@ missing_data <- df %>% summarize(across(everything(), ~sum(is.na(.))))
 
 #why are we missing one Sr ratio? a mystery. 
 nasr <- filter(df, is.na(Sr_ratio))
+
+rm(list=setdiff(ls(), "df"))
